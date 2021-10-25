@@ -1,0 +1,120 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: cloud-api
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: java8
+
+# you can overwrite defaults here
+#  stage: dev
+#  region: us-east-1
+
+# you can add statements to the Lambda function's IAM Role here
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:*"
+      Resource: "*"
+
+package:
+  artifact: 'target/${self:service}-${self:provider.stage}.jar'
+
+functions:
+  hello:
+    handler: com.serverless.Handler
+
+  listProducts:
+    handler: com.serverless.ListProductsHandler
+
+  getProduct:
+    handler: com.serverless.GetProductHandler
+
+resources:
+  Resources:
+    productsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: IoT_DynamoDB_Cloud_test
+        AttributeDefinitions:
+          - AttributeName: ID
+            AttributeType: N
+          - AttributeName: ABSOLUTE_BAROMETRIC_PRESSURE
+            AttributeType: N
+          - AttributeName: ABSOLUTE_THROTTLE_B
+            AttributeType: N
+          - AttributeName: CATALYST_TEMPERATURE_BANK1_SENSOR1
+            AttributeType: N
+          - AttributeName: CATALYST_TEMPERATURE_BANK1_SENSOR2
+            AttributeType: N
+          - AttributeName: COMMANDED_EVAPORATIVE_PURGE
+            AttributeType: N
+          - AttributeName: COMMANDED_THROTTLE_ACTUATOR
+            AttributeType: N
+          - AttributeName: CONTROL_MODULE_VOLTAGE
+            AttributeType: N
+          - AttributeName: COOLANT_TEMPERATURE
+            AttributeType: N
+          - AttributeName: DISTANCE_TRAVELED_WITH_MIL_ON
+            AttributeType: N
+          - AttributeName: ENGINE_LOAD
+            AttributeType: N
+          - AttributeName: ENGINE_RPM
+            AttributeType: N
+          - AttributeName: ENGINE_RUN_TINE
+            AttributeType: N
+          - AttributeName: FUEL_AIR_COMMANDED_EQUIV_RATIO
+            AttributeType: N
+          - AttributeName: FUEL_TANK
+            AttributeType: N
+          - AttributeName: INTAKE_AIR_TEMP
+            AttributeType: N
+          - AttributeName: INTAKE_MANIFOLD_PRESSURE
+            AttributeType: N
+          - AttributeName: LONG_TERM_FUEL_TRIM_BANK_1
+            AttributeType: N
+          - AttributeName: PEDAL_D
+            AttributeType: N
+          - AttributeName: PEDAL_E
+            AttributeType: N
+          - AttributeName: RELATIVE_THROTTLE_POSITION
+            AttributeType: N
+          - AttributeName: SHORT_TERM_FUEL_TRIM_BANK_1
+            AttributeType: N
+          - AttributeName: THROTTLE
+            AttributeType: N
+          - AttributeName: TIME_RUN_WITH_MIL_ON
+            AttributeType: N
+          - AttributeName: TIME_SINCE_TROUBLE_CODES_CLEARED
+            AttributeType: N
+          - AttributeName: TIMING_ADVANCE
+            AttributeType: N
+          - AttributeName: VEHICLE_SPEED
+            AttributeType: N
+          - AttributeName: WARM_UPS_SINCE_CODES_CLEARED
+            AttributeType: N
+
+        KeySchema:
+        - AttributeName: ID
+          KeyType: Number
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
